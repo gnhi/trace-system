@@ -1,0 +1,19 @@
+# Engine CanvasKit: cùng một file cho mọi bản deploy của cùng phiên bản Flutter,
+# mà Pages lại trả max-age=0 nên nó không nằm lại ở biên và không nằm lại trong
+# máy người xem. 2,85MB tải lại mỗi lần vào là khoản nặng nhất của trang.
+/canvaskit/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+# Ảnh và file trong R2 đi qua worker, worker tự đặt header immutable của nó.
+
+# Apple đòi file liên kết ứng dụng phải trả đúng application/json, mà file này
+# không có đuôi nên Pages mặc định trả octet-stream.
+/.well-known/apple-app-site-association
+  Content-Type: application/json
+
+# Font icon đã tree-shake: thêm một icon mới là nội dung file đổi, nhưng tên
+# file thì không. Pages mặc định cho nó sống 4 tiếng trong máy người xem, nên
+# ai đã vào trang trước đó sẽ thấy ô trống ở chỗ icon mới suốt bốn tiếng. Rút
+# xuống 5 phút: file chỉ 18KB, đổi lại icon mới hiện ra gần như ngay.
+/assets/fonts/*
+  Cache-Control: public, max-age=300, must-revalidate
